@@ -1,0 +1,142 @@
+def main()
+f=fil3(sys.argv[1],'r')
+dna=""
+for 1in f:
+if l.startswith(">"):
+continue
+dna+=l.rstrip()
+perfile.
+f.close()
+frames'{"""""""}
+
+for i in xrange(0,len(DNA)-3):
+frame_number= i%3
+
+frames{frame_number} += codon_dictionary[ dna[i:i+3]]
+
+
+rc_dna= rc(dna)
+for i in xrange(0, len(rc_dna)-3):
+ frame_number = 5-i%3
+frame
+frames{frame_number} += codon_dictionary[ dna[i:i+3]]
+
+for frMes
+
+
+#######################################
+import sys
+from codondictionary import codon_dictionary 
+
+
+def read_sequence(seq_file,'r'):
+    f = file(seq_file,'r') #opens input file
+    sequence = '' #reads input file
+    for l in f:
+    	if l.startswith(">"):   # skip header line
+            continue 
+        sequence += l.rstrip().upper().replace('U','T')
+    f.close() #closes input file
+    return sequence
+
+#complementary strands of the original sequences
+def complement(seq):
+    dict = {'A':'T','T':'A','C':'G','G':'C'} #creates complementary strand dict
+    seq1 = [] 
+    for letter in range(len(sequence)):
+        seq1.append(dict[sequence[letter]])
+    return ''.join(seq1[::-1])
+
+def ORF_finder(sequence, seq1):
+    frames = ['','','','','','']
+    for i in range(0, len(sequence) - 3): #last codon begins 3 bases from the end
+        frameno = i % 3  
+        frames[frameno] += dict[sequence[i:i+3]]
+
+    # 3 reverse frames
+    for i in range(0, len(seq1) - 3):
+        frameno = 5 - i % 3 
+        frames[frameno] += dict[seq1[i:i+3]]        
+    count = 0
+    for frameno in range(len(frames)): 
+        ORFs = [x for x in frames[frameno].split('_') if len(x) > 30]
+        for pepseq in ORFs:
+            count += 1
+            print 'ORF',frameno+1,':',pepseq,'length:',len(pepseq)
+            
+
+def main(seq2, seq3):
+    seq2 = read_sequence(seq2)
+    comp_seq2 = complement(seq2)
+    print "SEQUENCE A:", seq2
+    frames2 = ORF_finder(seq2, comp_seq2)
+
+    seq3 = read_sequence(seq3)
+    comp_seq3 = complement(seq3)
+    print "SEQUENCE B:", seq3
+    frames3 = ORF_finder(seq3, comp_seq3)
+
+if __name__ == "__main__":
+    main(sys.argv[1],sys.argv[2]) 
+
+##########################
+import sys
+from sys import argv
+from codondictionary import codon_dictionary
+
+
+def read_sequence(seq_file):
+    f = file(seq_file,'r') #opens input file
+    seq = '' #reads input file, strips any unncessary spaces, makes sequence all uppercase, and replaces all Uracils with Thymines
+    for l in f:
+        if l.startswith(">"):   # skip header line
+            continue
+        seq += l.rstrip().upper().replace('U','T')
+    f.close() #closes input file
+    return seq
+
+#get complementary strands of the original sequences
+def find_complement(seq):
+    comp_dict = {'A':'T','T':'A','C':'G','G':'C'} #creates complementary strand dict
+    comp_seq = [] #sets up new variable that will contain the comp. strand as a string after the for loop
+    for letter in range(len(seq)):
+        comp_seq.append(comp_dict[seq[letter]])
+    return ''.join(comp_seq[::-1])
+
+def find_ORFs(seq, comp_seq):
+    frames = ['','','','','','']
+    #3 forward frames
+    for i in range(0, len(seq) - 3): #last codon begins 3 bases from the end
+        framenum = i % 3 #designates the current frame
+        frames[framenum] += codon_dictionary[seq[i:i+3]]
+
+    # 3 reverse frames
+    for i in range(0, len(comp_seq) - 3):
+        framenum = 5 - i % 3 #designate reverse reading frame
+        frames[framenum] += codon_dictionary[comp_seq[i:i+3]]
+    count = 0
+    for framenum in range(len(frames)): #split ORFs for each frame using "_" delimiter (stop codon = '-'), save > 15aa
+        ORFs = [x for x in frames[framenum].split('_') if len(x) > 30]
+        for pepseq in ORFs:
+            count += 1
+            print 'Frame#',framenum+1,':','length:',len(pepseq),pepseq
+            #framenum + 1 because the list starts are 0 ... so 0 is the 1st frame
+
+def main(seq1, seq2):
+    seq1 = read_sequence(seq1)
+    comp_seq1 = find_complement(seq1)
+    print "SEQUENCE A:", seq1
+    frames1 = find_ORFs(seq1, comp_seq1)
+
+    seq2 = read_sequence(seq2)
+    comp_seq2 = find_complement(seq2)
+    print "SEQUENCE B:", seq2
+    frames2 = find_ORFs(seq2, comp_seq2)
+
+if __name__ == "__main__":
+   main(sys.argv[1],sys.argv[2])
+
+
+
+
+ 
